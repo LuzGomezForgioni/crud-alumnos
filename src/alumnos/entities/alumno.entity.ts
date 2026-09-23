@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+
+import { Curso } from '../../cursos/entities/curso.entity';
 
 @Entity('alumnos')
 export class Alumno {
@@ -11,7 +13,7 @@ export class Alumno {
   @Column()
   apellido: string;
 
-  @Column({ unique: true })
+  @Column()
   dni: string;
 
   @Column()
@@ -23,6 +25,6 @@ export class Alumno {
   @Column({ type: 'date', nullable: true })
   fechaNacimiento: Date;
 
-  @Column()
-  curso: string;
+  @ManyToOne(() => Curso, (curso) => curso.alumnos)
+  curso: Curso;
 }

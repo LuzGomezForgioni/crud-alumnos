@@ -46,13 +46,15 @@ export class AlumnosService {
     const alumno = await this.alumnosRepository.findOneBy({ id });
 
     if (!alumno) {
-      throw new NotFoundException('Alumno no encontrado');
+      throw new NotFoundException(`Alumno con id ${id} no encontrado`);
     }
 
     return alumno;
   }
 
   async update(id: number, dto: UpdateAlumnoDto) {
+    await this.findOne(id);
+
     if (dto.dni) {
       const alumnoExistente = await this.alumnosRepository.findOneBy({
         dni: dto.dni,
@@ -69,6 +71,8 @@ export class AlumnosService {
   }
 
   async remove(id: number) {
-    return await this.alumnosRepository.delete(id);
+    const alumno = await this.findOne(id);
+
+    return await this.alumnosRepository.remove(alumno);
   }
 }
